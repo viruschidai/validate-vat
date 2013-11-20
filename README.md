@@ -1,4 +1,5 @@
-# VAT number validation lib
+# Validate VAT number
+[![Build Status](https://travis-ci.org/viruschidai/validate-vat.png?branch=master)](https://travis-ci.org/viruschidai/validate-vat)
 ## What is a VAT number?
 A value added tax identification number or VAT identification number (VATIN) is an identifier used in many countries, including the countries of the European Union, for value added tax purposes.
 

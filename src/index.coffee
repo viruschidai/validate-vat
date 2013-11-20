@@ -44,7 +44,7 @@ headers =
   'SOAPAction': 'urn:ec.europa.eu:taxud:vies:services:checkVat/checkVat'
 
 getReadableErrorMsg = (faultstring) ->
-  if faultstring in ERROR_MSG
+  if ERROR_MSG[faultstring]?
     return ERROR_MSG[faultstring]
   else
     return ERROR_MSG['UNKNOWN']
@@ -59,8 +59,31 @@ flattenCheckVatResponse = (vatResponse) ->
     ret[key] = v
   return ret
 
-exports.validate = (countryCode, vatNumber, callback) ->
+# I don't really want to install any xml parser which may require multpiple packages
+parseSoapResponse = (soapMessage) ->
+  parseField = (field) ->
+    regex = new RegExp "<#{field}>\((\.|\\s)\*\)</#{field}>", 'gm'
+    match = regex.exec(soapMessage)
+    return match[1]
 
+  hasFault = soapMessage.match /<soap:Fault>\S+<\/soap:Fault>/g
+  if hasFault 
+    ret =
+      faultCode: parseField 'faultcode' 
+      faultString: parseField 'faultstring' 
+  else
+    ret =
+      countryCode: parseField 'countryCode' 
+      vatNumber: parseField 'vatNumber' 
+      requestDate: parseField 'requestDate' 
+      valid: parseField('valid') is 'true'
+      name: parseField 'name'
+      address: parseField('address').replace /\n/g, ', '
+
+  return ret 
+
+
+exports.validate = (countryCode, vatNumber, callback) ->
   if countryCode not in EU_COUNTRIES_CODES or vatNumber?.length < 9
     return process.nextTick -> callback new Error ERROR_MSG['INVALID_INPUT']
 
@@ -79,23 +102,11 @@ exports.validate = (countryCode, vatNumber, callback) ->
   request options, (err, response, body) ->
     if err then return callback err
 
-    parseString body, (err, result) ->
-      if err
-        err.body = body
-        return callback err
+    data = parseSoapResponse body
 
-      soapBody = result['soap:Envelope']['soap:Body']
-      callResponse = soapBody[0]
+    if data.faultString?.length
+      err = new Error getReadableErrorMsg data.faultString
+      err.code = data.faultCode
+      return callback err
 
-      if callResponse.faultstring?.length
-        return callback new Error getReadableErrorMsg callResponse.faultstring[0]
-
-      if !callResponse.checkVatResponse?.length
-        err = new Error 'Failed to receive response checkVat call from EU VIES service.'
-        err.body = body
-        err.response = response
-
-        return callback err
-
-      validationInfo = flattenCheckVatResponse callResponse.checkVatResponse[0]
-      return callback null, validationInfo
+    return callback null, data 

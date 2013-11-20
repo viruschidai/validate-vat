@@ -4,8 +4,7 @@
   "description": "A Europe VAT number validation lib",
   "main": "lib/index.js",
   "dependencies": {
-    "request": "~2.27.0",
-    "xml2js": "~0.2.8"
+    "request": "~2.27.0"
   },
   "devDependencies": {
     "coffee-script": "~1.6.3",
@@ -23,7 +22,9 @@
   "keywords": [
     "VAT",
     "Tax",
-    "Number"
+    "Number",
+    "Validation",
+    "node.js"
   ],
   "author": "Bill Gao",
   "license": "BSD-2-Clause",
