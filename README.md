@@ -1,4 +1,4 @@
-# Validate VAT number
+# Validate European VAT number
 [![Build Status](https://travis-ci.org/viruschidai/validate-vat.png?branch=master)](https://travis-ci.org/viruschidai/validate-vat)
 ## What is a VAT number?
 A value added tax identification number or VAT identification number (VATIN) is an identifier used in many countries, including the countries of the European Union, for value added tax purposes.
@@ -15,10 +15,46 @@ validate(countryCode, vatNumber, callback)
 #### Example
 ```javascript
 var validate = require('validate-vat').validate;
-validate( 'GB',  'xxxxxxx',  function(err, validationInfo) {
+validate( 'xx',  'xxxxxxx',  function(err, validationInfo) {
     console.log(validationInfo);
 });
 ```
+
+#### Returns
+when valid
+```javascript
+{ 
+  countryCode: 'xx',
+  vatNumber: 'xxxxxxxxx',
+  requestDate: '2013-11-22+01:00',
+  valid: true,
+  name: 'company name',
+  address: 'company address' 
+}
+```
+
+when invalid
+```javascript
+{ countryCode: 'GB',
+  vatNumber: '802311783',
+  requestDate: '2013-11-22+01:00',
+  valid: false,
+  name: '---',
+  address: '---' 
+}
+```
+
+possible error message
+```javascript
+'The provided CountryCode is invalid or the VAT number is empty',
+'The VIES VAT service is unavailable, please try again later',
+'The VAT database of the reqeust member country is unavailable, please try again later',
+'The request to VAT database of the reqeust member country  is time out, please try again later',
+'The service cannot process your request, please try again later',
+'Unknown error'
+```
+
+For more details usage, please check test
 
 ## License
 The MIT License (MIT)
