@@ -4,7 +4,6 @@
   "description": "A Europe VAT number validation lib",
   "main": "lib/index.js",
   "dependencies": {
-    "request": "~2.27.0"
   },
   "devDependencies": {
     "coffee-script": "~1.6.3",

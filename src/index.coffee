@@ -1,6 +1,5 @@
 url = require 'url'
-request = require('request');
-{parseString} = require 'xml2js'
+http = require 'http'
 
 serviceUrl = 'http://ec.europa.eu/taxation_customs/vies/services/checkVatService'
 
@@ -95,18 +94,24 @@ exports.validate = (countryCode, vatNumber, callback) ->
 
   options =
     uri: serviceUrl,
+    host: parsedUrl.host
     method: 'POST',
+    path: parsedUrl.path
     headers: headers
     body: xml
 
-  request options, (err, response, body) ->
-    if err then return callback err
+  req = http.request options, (res) ->
+    res.setEncoding 'utf8'
+    res.on 'data', (body) ->
+      data = parseSoapResponse body
 
-    data = parseSoapResponse body
+      if data.faultString?.length
+        err = new Error getReadableErrorMsg data.faultString
+        err.code = data.faultCode
+        return callback err
 
-    if data.faultString?.length
-      err = new Error getReadableErrorMsg data.faultString
-      err.code = data.faultCode
-      return callback err
+      return callback null, data 
 
-    return callback null, data 
+  req.on 'error', callback 
+  req.write xml
+  req.end()
