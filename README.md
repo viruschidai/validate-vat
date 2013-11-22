@@ -20,7 +20,7 @@ validate( 'xx',  'xxxxxxx',  function(err, validationInfo) {
 });
 ```
 
-#### Returns
+##### Returns
 when valid
 ```javascript
 { 
@@ -32,19 +32,17 @@ when valid
   address: 'company address' 
 }
 ```
-
 when invalid
 ```javascript
-{ countryCode: 'GB',
-  vatNumber: '802311783',
+{ countryCode: 'xx',
+  vatNumber: 'xxxxxxxxxx',
   requestDate: '2013-11-22+01:00',
   valid: false,
   name: '---',
   address: '---' 
 }
 ```
-
-possible error message
+possible error messages
 ```javascript
 'The provided CountryCode is invalid or the VAT number is empty',
 'The VIES VAT service is unavailable, please try again later',
@@ -53,7 +51,6 @@ possible error message
 'The service cannot process your request, please try again later',
 'Unknown error'
 ```
-
 For more details usage, please check test
 
 ## License
