@@ -48,16 +48,6 @@ getReadableErrorMsg = (faultstring) ->
   else
     return ERROR_MSG['UNKNOWN']
 
-flattenCheckVatResponse = (vatResponse) ->
-  ret = {}
-  for key, value of vatResponse when key isnt '$'
-    v = value[0]
-    if v is 'true' then v = true
-    else if v is 'false' then v = false
-
-    ret[key] = v
-  return ret
-
 # I don't really want to install any xml parser which may require multpiple packages
 parseSoapResponse = (soapMessage) ->
   parseField = (field) ->
@@ -81,7 +71,6 @@ parseSoapResponse = (soapMessage) ->
 
   return ret 
 
-
 exports.validate = (countryCode, vatNumber, callback) ->
   if countryCode not in EU_COUNTRIES_CODES or vatNumber?.length < 9
     return process.nextTick -> callback new Error ERROR_MSG['INVALID_INPUT']
@@ -93,12 +82,10 @@ exports.validate = (countryCode, vatNumber, callback) ->
   headers['Content-Length'] = Buffer.byteLength(xml, 'utf8');;
 
   options =
-    uri: serviceUrl,
     host: parsedUrl.host
     method: 'POST',
     path: parsedUrl.path
     headers: headers
-    body: xml
 
   req = http.request options, (res) ->
     res.setEncoding 'utf8'
