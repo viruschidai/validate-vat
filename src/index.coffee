@@ -72,7 +72,7 @@ parseSoapResponse = (soapMessage) ->
   return ret 
 
 exports.validate = (countryCode, vatNumber, callback) ->
-  if countryCode not in EU_COUNTRIES_CODES or vatNumber?.length < 9
+  if countryCode not in EU_COUNTRIES_CODES or !vatNumber?.length 
     return process.nextTick -> callback new Error ERROR_MSG['INVALID_INPUT']
 
   xml = soapBodyTemplate.replace('_country_code_placeholder_', countryCode)

@@ -14,8 +14,12 @@ describe 'validate()', ->
       expect(validationInfo.valid).to.be false
       done()
 
-
   it 'should return INVALID_INPUT if the countryCode is US', (done) ->
     vat.validate 'US', '802311782', (err, validationInfo) ->
+      expect(err.message).to.be 'The provided CountryCode is invalid or the VAT number is empty'
+      done()
+
+  it 'should return INVALID_INPUT if the vatNumber is empty', (done) ->
+    vat.validate 'GB', '', (err, validationInfo) ->
       expect(err.message).to.be 'The provided CountryCode is invalid or the VAT number is empty'
       done()
