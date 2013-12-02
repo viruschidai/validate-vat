@@ -56,23 +56,23 @@ parseSoapResponse = (soapMessage) ->
     return match[1]
 
   hasFault = soapMessage.match /<soap:Fault>\S+<\/soap:Fault>/g
-  if hasFault 
+  if hasFault
     ret =
-      faultCode: parseField 'faultcode' 
-      faultString: parseField 'faultstring' 
+      faultCode: parseField 'faultcode'
+      faultString: parseField 'faultstring'
   else
     ret =
-      countryCode: parseField 'countryCode' 
-      vatNumber: parseField 'vatNumber' 
-      requestDate: parseField 'requestDate' 
+      countryCode: parseField 'countryCode'
+      vatNumber: parseField 'vatNumber'
+      requestDate: parseField 'requestDate'
       valid: parseField('valid') is 'true'
       name: parseField 'name'
       address: parseField('address').replace /\n/g, ', '
 
-  return ret 
+  return ret
 
 exports.validate = (countryCode, vatNumber, callback) ->
-  if countryCode not in EU_COUNTRIES_CODES or !vatNumber?.length 
+  if countryCode not in EU_COUNTRIES_CODES or !vatNumber?.length
     return process.nextTick -> callback new Error ERROR_MSG['INVALID_INPUT']
 
   xml = soapBodyTemplate.replace('_country_code_placeholder_', countryCode)
@@ -89,16 +89,21 @@ exports.validate = (countryCode, vatNumber, callback) ->
 
   req = http.request options, (res) ->
     res.setEncoding 'utf8'
-    res.on 'data', (body) ->
-      data = parseSoapResponse body
+    str = ''
+    res.on 'data', (chunk) ->
+      str += chunk
+
+    res.on 'end', ->
+      data = parseSoapResponse str
 
       if data.faultString?.length
         err = new Error getReadableErrorMsg data.faultString
         err.code = data.faultCode
         return callback err
 
-      return callback null, data 
+      return callback null, data
 
-  req.on 'error', callback 
+  req.on 'error', callback
   req.write xml
   req.end()
+
