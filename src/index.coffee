@@ -25,21 +25,21 @@ EU_COUNTRIES_CODES = ['AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR'
   'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'GB']
 
 ERROR_MSG =
-  'INVALID_INPUT': 'The provided CountryCode is invalid or the VAT number is empty',
-  'SERVICE_UNAVAILABLE': 'The VIES VAT service is unavailable, please try again later',
-  'MS_UNAVAILABLE': 'The VAT database of the reqeust member country is unavailable, please try again later',
-  'TIMEOUT': 'The request to VAT database of the reqeust member country  is time out, please try again later',
-  'SERVER_BUSY': 'The service cannot process your request, please try again later',
+  'INVALID_INPUT': 'The provided CountryCode is invalid or the VAT number is empty'
+  'SERVICE_UNAVAILABLE': 'The VIES VAT service is unavailable, please try again later'
+  'MS_UNAVAILABLE': 'The VAT database of the reqeust member country is unavailable, please try again later'
+  'TIMEOUT': 'The request to VAT database of the reqeust member country  is time out, please try again later'
+  'SERVER_BUSY': 'The service cannot process your request, please try again later'
   'UNKNOWN': 'Unknown error'
 
 headers =
-  'Content-Type': 'application/x-www-form-urlencoded',
-  'User-Agent': 'node-soap',
-  'Accept' : 'text/html,application/xhtml+xml,application/xml,text/xml;q=0.9,*/*;q=0.8',
-  'Accept-Encoding': 'none',
-  'Accept-Charset': 'utf-8',
-  'Connection': 'close',
-  'Host' : parsedUrl.hostname,
+  'Content-Type': 'application/x-www-form-urlencoded'
+  'User-Agent': 'node-soap'
+  'Accept' : 'text/html,application/xhtml+xml,application/xml,text/xml;q=0.9,*/*;q=0.8'
+  'Accept-Encoding': 'none'
+  'Accept-Charset': 'utf-8'
+  'Connection': 'close'
+  'Host' : parsedUrl.hostname
   'SOAPAction': 'urn:ec.europa.eu:taxud:vies:services:checkVat/checkVat'
 
 getReadableErrorMsg = (faultstring) ->
@@ -71,7 +71,7 @@ parseSoapResponse = (soapMessage) ->
 
   return ret
 
-exports.validate = (countryCode, vatNumber, callback) ->
+module.exports = exports = (countryCode, vatNumber, callback) ->
   if countryCode not in EU_COUNTRIES_CODES or !vatNumber?.length
     return process.nextTick -> callback new Error ERROR_MSG['INVALID_INPUT']
 
@@ -79,7 +79,7 @@ exports.validate = (countryCode, vatNumber, callback) ->
     .replace('_vat_number_placeholder_', vatNumber)
     .replace('\n', '').trim()
 
-  headers['Content-Length'] = Buffer.byteLength(xml, 'utf8');;
+  headers['Content-Length'] = Buffer.byteLength xml, 'utf8'
 
   options =
     host: parsedUrl.host

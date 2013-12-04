@@ -9,12 +9,12 @@ npm install validate-vat
 ```
 In your code
 ```javascript
-var validate = require('validate-vat').validate;
+var validate = require('validate-vat');
 validate(countryCode, vatNumber, callback)
 ```
 #### Example
 ```javascript
-var validate = require('validate-vat').validate;
+var validate = require('validate-vat');
 validate( 'xx',  'xxxxxxx',  function(err, validationInfo) {
     console.log(validationInfo);
 });
@@ -23,23 +23,24 @@ validate( 'xx',  'xxxxxxx',  function(err, validationInfo) {
 ##### Returns
 when valid
 ```javascript
-{ 
+{
   countryCode: 'xx',
   vatNumber: 'xxxxxxxxx',
   requestDate: '2013-11-22+01:00',
   valid: true,
   name: 'company name',
-  address: 'company address' 
+  address: 'company address'
 }
 ```
 when invalid
 ```javascript
-{ countryCode: 'xx',
+{
+  countryCode: 'xx',
   vatNumber: 'xxxxxxxxxx',
   requestDate: '2013-11-22+01:00',
   valid: false,
   name: '---',
-  address: '---' 
+  address: '---'
 }
 ```
 possible error messages
@@ -52,6 +53,14 @@ possible error messages
 'Unknown error'
 ```
 For more details usage, please check test
+
+## Change Log
+0.3.0 - 05/Dec/2013
+  Instead of
+  `var validate = require('validate-vat').validate`
+  You should call
+  `var validate = require('validate-vat)'
+  This will break your code, so update all the usages if you want to use this version
 
 ## License
 The MIT License (MIT)
