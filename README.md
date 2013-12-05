@@ -55,12 +55,12 @@ possible error messages
 For more details usage, please check test
 
 ## Change Log
-0.3.0 - 05/Dec/2013
-  Instead of
-  `var validate = require('validate-vat').validate`
-  You should call
-  `var validate = require('validate-vat)'
-  This will break your code, so update all the usages if you want to use this version
+####0.3.0 - 05/Dec/2013
+Instead of
+`var validate = require('validate-vat').validate`
+, you should call
+`var validate = require('validate-vat)'
+This will break your code, so update all the usages if you want to use this version
 
 ## License
 The MIT License (MIT)
