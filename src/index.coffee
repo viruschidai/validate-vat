@@ -53,7 +53,10 @@ parseSoapResponse = (soapMessage) ->
   parseField = (field) ->
     regex = new RegExp "<#{field}>\((\.|\\s)\*\)</#{field}>", 'gm'
     match = regex.exec(soapMessage)
-    return match[1]
+  	try
+	  	return match[1]
+		catch e
+			return ERROR_MSG["UNKNOWN"]
 
   hasFault = soapMessage.match /<soap:Fault>\S+<\/soap:Fault>/g
   if hasFault
