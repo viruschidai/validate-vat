@@ -53,6 +53,10 @@ parseSoapResponse = (soapMessage) ->
   parseField = (field) ->
     regex = new RegExp "<#{field}>\((\.|\\s)\*\)</#{field}>", 'gm'
     match = regex.exec(soapMessage)
+    if !match
+      err = new Error "Failed to parseField #{field}"
+      err.soapMessage = soapMessage
+      throw err
     return match[1]
 
   hasFault = soapMessage.match /<soap:Fault>\S+<\/soap:Fault>/g
@@ -94,7 +98,10 @@ module.exports = exports = (countryCode, vatNumber, callback) ->
       str += chunk
 
     res.on 'end', ->
-      data = parseSoapResponse str
+      try
+        data = parseSoapResponse str
+      catch err
+        return callback err
 
       if data.faultString?.length
         err = new Error getReadableErrorMsg data.faultString
