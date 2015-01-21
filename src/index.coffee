@@ -27,8 +27,8 @@ EU_COUNTRIES_CODES = ['AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR'
 ERROR_MSG =
   'INVALID_INPUT': 'The provided CountryCode is invalid or the VAT number is empty'
   'SERVICE_UNAVAILABLE': 'The VIES VAT service is unavailable, please try again later'
-  'MS_UNAVAILABLE': 'The VAT database of the reqeust member country is unavailable, please try again later'
-  'TIMEOUT': 'The request to VAT database of the reqeust member country  is time out, please try again later'
+  'MS_UNAVAILABLE': 'The VAT database of the requested member country is unavailable, please try again later'
+  'TIMEOUT': 'The request to VAT database of the requested member country has timed out, please try again later'
   'SERVER_BUSY': 'The service cannot process your request, please try again later'
   'UNKNOWN': 'Unknown error'
 
