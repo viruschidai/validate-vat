@@ -47,12 +47,12 @@ when invalid
 ```
 possible error messages
 ```javascript
-'The provided CountryCode is invalid or the VAT number is empty'
-'The VIES VAT service is unavailable, please try again later'
-'The VAT database of the requested member country is unavailable, please try again later'
-'The request to VAT database of the requested member country has timed out, please try again later'
-'The service cannot process your request, please try again later'
-'Unknown error'
+  'The provided CountryCode is invalid or the VAT number is empty'
+  'The VIES VAT service is unavailable, please try again later'
+  'The VAT database of the requested member country is unavailable, please try again later'
+  'The request to VAT database of the requested member country has timed out, please try again later'
+  'The service cannot process your request, please try again later'
+  'Unknown error'
 ```
 For more details usage, please check test
 
