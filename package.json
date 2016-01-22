@@ -27,7 +27,7 @@
     "node.js"
   ],
   "author": "Bill Gao",
-  "license": "BSD-2-Clause",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/viruschidai/validate-vat/issues"
   },
