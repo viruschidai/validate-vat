@@ -10,6 +10,10 @@ describe 'validate()', ->
       expect(validationInfo.valid).to.be true
       done()
 
+  it 'should abort request if timeout is specified', (done) ->
+    validate 'NL', '853746333B01', 10, (err) ->
+      expect(err.code).to.be 'ECONNRESET'
+      done()
 
   it 'should return false if it is an invalid VAT number', (done) ->
     validate 'GB', '802311783', (err, validationInfo) ->
