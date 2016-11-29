@@ -3,8 +3,9 @@ validate = require '../src/index'
 
 describe 'validate()', ->
 
+  # Netflix 2016 VAT Number
   it 'should return true if it is a valid VAT number', (done) ->
-    validate 'GB', '802311782', (err, validationInfo) ->
+    validate 'NL', '853746333B01', (err, validationInfo) ->
       if err then return done err
       expect(validationInfo.valid).to.be true
       done()
