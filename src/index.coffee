@@ -75,7 +75,11 @@ parseSoapResponse = (soapMessage) ->
 
   return ret
 
-module.exports = exports = (countryCode, vatNumber, callback) ->
+module.exports = exports = (countryCode, vatNumber, timeout, callback) ->
+  if typeof timeout is 'function'
+    callback = timeout
+    timeout = null
+
   if countryCode not in EU_COUNTRIES_CODES or !vatNumber?.length
     return process.nextTick -> callback new Error ERROR_MSG['INVALID_INPUT']
 
@@ -110,7 +114,9 @@ module.exports = exports = (countryCode, vatNumber, callback) ->
 
       return callback null, data
 
+  if timeout then req.setTimeout timeout, ->
+    req.abort()
+
   req.on 'error', callback
   req.write xml
   req.end()
-
