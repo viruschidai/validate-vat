@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/viruschidai/validate-vat.png?branch=master)](https://travis-ci.org/viruschidai/validate-vat)
 [![Downloads](https://img.shields.io/npm/dm/validate-vat.svg)](https://www.npmjs.com/package/validate-vat)
 
-You can verify the validity of a VAT number issued by any European Union Member State by by using this library. This lib is basically calling web service provided by VIES (at http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl) for VAT number validation. 
+A very lightweight, tiny lib (no external dependencies) allows you to verify the validity of a VAT number issued by any European Union Member State. This lib is basically calling web service provided by VIES (at http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl) for VAT number validation. 
 
 ## What is a VAT number?
 A value added tax identification number or VAT identification number (VATIN) is an identifier used in many countries, including the countries of the European Union, for value added tax purposes.
