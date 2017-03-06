@@ -94,6 +94,7 @@ module.exports = exports = (countryCode, vatNumber, timeout, callback) ->
     method: 'POST',
     path: parsedUrl.path
     headers: headers
+    family: 4
 
   req = http.request options, (res) ->
     res.setEncoding 'utf8'
