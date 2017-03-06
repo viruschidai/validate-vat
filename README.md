@@ -60,6 +60,9 @@ possible error messages
 For more details usage, please check test
 
 ## Change Log
+####0.5.0 
+- Use IPv4 explicitly https://github.com/viruschidai/validate-vat/pull/13
+
 ####0.4.0
 - Added a timeout option in https://github.com/viruschidai/validate-vat/pull/9
 - Upgraded versions of dev dependencies to latest versions
