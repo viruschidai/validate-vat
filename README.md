@@ -60,17 +60,17 @@ possible error messages
 For more details usage, please check test
 
 ## Change Log
-####0.5.0 
+### 0.5.0 
 - Use IPv4 explicitly https://github.com/viruschidai/validate-vat/pull/13
 
-####0.4.0
+### 0.4.0
 - Added a timeout option in https://github.com/viruschidai/validate-vat/pull/9
 - Upgraded versions of dev dependencies to latest versions
 
-####0.3.1
+### 0.3.1
 Wrap field parse in a try catch block when it can not parse a soap message. The soap message will be attached to the error object for furthur investigation.
 
-####0.3.0 - 05/Dec/2013
+### 0.3.0 - 05/Dec/2013
 Instead of
 `var validate = require('validate-vat').validate`
 , you should call
