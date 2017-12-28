@@ -51,7 +51,7 @@ getReadableErrorMsg = (faultstring) ->
 # I don't really want to install any xml parser which may require multpiple packages
 parseSoapResponse = (soapMessage) ->
   parseField = (field) ->
-    regex = new RegExp "<#{field}>\((\.|\\s)\*\)</#{field}>", 'gm'
+    regex = new RegExp "<#{field}>\((\.|\\s)\*?\)</#{field}>", 'gm'
     match = regex.exec(soapMessage)
     if !match
       err = new Error "Failed to parseField #{field}"
