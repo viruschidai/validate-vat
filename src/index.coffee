@@ -24,14 +24,6 @@ soapBodyTemplate = '''
 EU_COUNTRIES_CODES = ['AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'EL', 'HU',
   'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'GB']
 
-ERROR_MSG =
-  'INVALID_INPUT': 'The provided CountryCode is invalid or the VAT number is empty'
-  'SERVICE_UNAVAILABLE': 'The VIES VAT service is unavailable, please try again later'
-  'MS_UNAVAILABLE': 'The VAT database of the requested member country is unavailable, please try again later'
-  'MS_MAX_CONCURRENT_REQ': 'The VAT database of the requested member country has had too many requests, please try again later'
-  'TIMEOUT': 'The request to VAT database of the requested member country has timed out, please try again later'
-  'SERVER_BUSY': 'The service cannot process your request, please try again later'
-  'UNKNOWN': 'Unknown error'
 
 headers =
   'Content-Type': 'application/x-www-form-urlencoded'
@@ -42,12 +34,6 @@ headers =
   'Connection': 'close'
   'Host' : parsedUrl.hostname
   'SOAPAction': 'urn:ec.europa.eu:taxud:vies:services:checkVat/checkVat'
-
-getReadableErrorMsg = (faultstring) ->
-  if ERROR_MSG[faultstring]?
-    return ERROR_MSG[faultstring]
-  else
-    return ERROR_MSG['UNKNOWN']
 
 # I don't really want to install any xml parser which may require multpiple packages
 parseSoapResponse = (soapMessage) ->
@@ -82,7 +68,7 @@ module.exports = exports = (countryCode, vatNumber, timeout, callback) ->
     timeout = null
 
   if countryCode not in EU_COUNTRIES_CODES or !vatNumber?.length
-    return process.nextTick -> callback new Error ERROR_MSG['INVALID_INPUT']
+    return process.nextTick -> callback 'INVALID_INPUT'
 
   xml = soapBodyTemplate.replace('_country_code_placeholder_', countryCode)
     .replace('_vat_number_placeholder_', vatNumber)
@@ -110,7 +96,7 @@ module.exports = exports = (countryCode, vatNumber, timeout, callback) ->
         return callback err
 
       if data.faultString?.length
-        err = new Error getReadableErrorMsg data.faultString
+        err = data.faultString
         err.code = data.faultCode
         return callback err
 
