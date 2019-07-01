@@ -14,41 +14,43 @@ npm install validate-vat
 ```
 In your code
 ```javascript
-var validate = require('validate-vat');
-validate(countryCode, vatNumber, callback)
-```
-#### Example
-```javascript
-var validate = require('validate-vat');
-validate( 'xx',  'xxxxxxx',  function(err, validationInfo) {
-    console.log(validationInfo);
-});
+var validateVAT = require('validate-vat');
+var vatID = 'DE1234567890';
+var vatResult = await validate(vatID);
+console.log(vatResult.valid ? "valid" : "not valid");
 ```
 
 ##### Returns
-when valid
+if valid:
 ```javascript
 {
-  countryCode: 'xx',
-  vatNumber: 'xxxxxxxxx',
-  requestDate: '2013-11-22+01:00',
   valid: true,
   name: 'company name',
   address: 'company address'
 }
 ```
-when invalid
+(name and address are optional, depending on country)
+
+if invalid:
 ```javascript
 {
-  countryCode: 'xx',
-  vatNumber: 'xxxxxxxxxx',
-  requestDate: '2013-11-22+01:00',
   valid: false,
   name: '---',
   address: '---'
 }
 ```
-possible error messages
+
+if state server down:
+```javascript
+{
+  valid: true,
+  validated: false,
+  name: '',
+  address: ''
+}
+```
+
+in case of other errors: throws an exception. Possible error messages:
 ```javascript
   'The provided CountryCode is invalid or the VAT number is empty'
   'The VIES VAT service is unavailable, please try again later'
@@ -57,10 +59,15 @@ possible error messages
   'The service cannot process your request, please try again later'
   'Unknown error'
 ```
-For more details usage, please check test
+For more details usage, please check test.
 
 ## Change Log
-### 0.5.0 
+### 0.6.0
+- Reformat as ES6 JS instead of Coffee script
+- Do simple syntax check first, before asking server
+- If state server is down, return valid, if syntax check passes
+
+### 0.5.0
 - Use IPv4 explicitly https://github.com/viruschidai/validate-vat/pull/13
 
 ### 0.4.0

@@ -1,23 +1,22 @@
 {
   "name": "validate-vat",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "EU VAT number validation",
   "main": "src/index.js",
   "dependencies": {},
-  "devDependencies": {
-    "expect.js": "0.3.1",
-  },
+  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "https://github.com/benbucksch/validate-vat"
   },
   "keywords": [
     "VAT",
+    "VAT ID",
     "VIES",
     "Tax",
+    "EU",
     "Number",
-    "Validation",
-    "node.js"
+    "Validation"
   ],
   "author": "Bill Gao",
   "license": "MIT",
