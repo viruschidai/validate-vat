@@ -127,6 +127,7 @@ function validateVAT(vatID, timeout) {
               name: '',
               address: '',
             });
+            return;
           }
           errorCallback(ex);
           return;
