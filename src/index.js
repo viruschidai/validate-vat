@@ -1,20 +1,17 @@
-var ERROR_MSG, EU_COUNTRIES_CODES, exports, getReadableErrorMsg, headers, http, parseSoapResponse, parsedUrl, serviceUrl, soapBodyTemplate, url,
-  indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+const url = require('url');
+const http = require('http');
+//var indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-url = require('url');
+const serviceUrl = 'http://ec.europa.eu/taxation_customs/vies/services/checkVatService';
+const parsedUrl = url.parse(serviceUrl);
 
-http = require('http');
+const soapBodyTemplate = '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"\n  xmlns:tns1="urn:ec.europa.eu:taxud:vies:services:checkVat:types"\n  xmlns:impl="urn:ec.europa.eu:taxud:vies:services:checkVat">\n  <soap:Header>\n  </soap:Header>\n  <soap:Body>\n    <tns1:checkVat xmlns:tns1="urn:ec.europa.eu:taxud:vies:services:checkVat:types"\n     xmlns="urn:ec.europa.eu:taxud:vies:services:checkVat:types">\n     <tns1:countryCode>%COUNTRY_CODE%</tns1:countryCode>\n     <tns1:vatNumber>%VAT_NUMBER%</tns1:vatNumber>\n    </tns1:checkVat>\n  </soap:Body>\n</soap:Envelope>';
 
-serviceUrl = 'http://ec.europa.eu/taxation_customs/vies/services/checkVatService';
+const EU_COUNTRIES_CODES = ['AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'EL', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'GB'];
 
-parsedUrl = url.parse(serviceUrl);
-
-soapBodyTemplate = '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"\n  xmlns:tns1="urn:ec.europa.eu:taxud:vies:services:checkVat:types"\n  xmlns:impl="urn:ec.europa.eu:taxud:vies:services:checkVat">\n  <soap:Header>\n  </soap:Header>\n  <soap:Body>\n    <tns1:checkVat xmlns:tns1="urn:ec.europa.eu:taxud:vies:services:checkVat:types"\n     xmlns="urn:ec.europa.eu:taxud:vies:services:checkVat:types">\n     <tns1:countryCode>_country_code_placeholder_</tns1:countryCode>\n     <tns1:vatNumber>_vat_number_placeholder_</tns1:vatNumber>\n    </tns1:checkVat>\n  </soap:Body>\n</soap:Envelope>';
-
-EU_COUNTRIES_CODES = ['AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'EL', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'GB'];
-
-ERROR_MSG = {
-  'INVALID_INPUT': 'The provided CountryCode is invalid or the VAT number is empty',
+const ERROR_MSG = {
+  'INVALID_INPUT_COUNTRY': 'The country code in the VAT ID is invalid',
+  'INVALID_INPUT_NUMBER': 'The VAT number part is empty',
   'SERVICE_UNAVAILABLE': 'The VIES VAT service is unavailable, please try again later',
   'MS_UNAVAILABLE': 'The VAT database of the requested member country is unavailable, please try again later',
   'MS_MAX_CONCURRENT_REQ': 'The VAT database of the requested member country has had too many requests, please try again later',
@@ -23,106 +20,113 @@ ERROR_MSG = {
   'UNKNOWN': 'Unknown error'
 };
 
-headers = {
+var headers = {
   'Content-Type': 'application/x-www-form-urlencoded',
-  'User-Agent': 'node-soap',
+  'User-Agent': 'soap node',
   'Accept': 'text/html,application/xhtml+xml,application/xml,text/xml;q=0.9,*/*;q=0.8',
   'Accept-Encoding': 'none',
   'Accept-Charset': 'utf-8',
   'Connection': 'close',
   'Host': parsedUrl.hostname,
-  'SOAPAction': 'urn:ec.europa.eu:taxud:vies:services:checkVat/checkVat'
+  'SOAPAction': 'urn:ec.europa.eu:taxud:vies:services:checkVat/checkVat',
 };
 
-getReadableErrorMsg = function(faultstring) {
-  if (ERROR_MSG[faultstring] != null) {
+function getReadableErrorMsg(faultstring) {
+  if (ERROR_MSG[faultstring]) {
     return ERROR_MSG[faultstring];
   } else {
     return ERROR_MSG['UNKNOWN'];
   }
 };
 
-parseSoapResponse = function(soapMessage) {
-  var hasFault, parseField, ret;
-  parseField = function(field) {
-    var err, match, regex;
-    regex = new RegExp("<" + field + ">\((\.|\\s)\*?\)</" + field + ">", 'gm');
-    match = regex.exec(soapMessage);
+function parseSoapResponse(soapMessage) {
+  function parseField(field) {
+    var regex = new RegExp("<" + field + ">\((\.|\\s)\*?\)</" + field + ">", 'gm');
+    var match = regex.exec(soapMessage);
     if (!match) {
-      err = new Error("Failed to parseField " + field);
-      err.soapMessage = soapMessage;
-      throw err;
+      let ex = new Error("Failed to parse field " + field);
+      ex.soapMessage = soapMessage;
+      throw ex;
     }
     return match[1];
   };
-  hasFault = soapMessage.match(/<soap:Fault>\S+<\/soap:Fault>/g);
+
+  var hasFault = soapMessage.match(/<soap:Fault>\S+<\/soap:Fault>/g);
   if (hasFault) {
-    ret = {
-      faultCode: parseField('faultcode'),
-      faultString: parseField('faultstring')
-    };
-  } else {
-    ret = {
-      countryCode: parseField('countryCode'),
-      vatNumber: parseField('vatNumber'),
-      requestDate: parseField('requestDate'),
-      valid: parseField('valid') === 'true',
-      name: parseField('name'),
-      address: parseField('address').replace(/\n/g, ', ')
-    };
+    let msg = getReadableErrorMsg(parseField('faultstring'));
+    let ex = new Error(msg);
+    ex.code = parseField('faultcode');
+    throw ex;
   }
-  return ret;
+  return {
+    countryCode: parseField('countryCode'),
+    vatNumber: parseField('vatNumber'),
+    valid: parseField('valid') === 'true',
+    name: parseField('name'),
+    address: parseField('address').replace(/\n/g, ', '),
+  };
 };
 
-module.exports = exports = function(countryCode, vatNumber, timeout, callback) {
-  var options, req, xml;
-  if (typeof timeout === 'function') {
-    callback = timeout;
-    timeout = null;
+/**
+ * @param vatID {string} VAT ID, starting with 2-letter country code, then the number,
+ *     e.g. "DE1234567890"
+ * @returns {Promise}
+ * async function (you can `await` it)
+ * @returns {
+*   valid {boolean}   this is what you're most likely interested in
+ *   name {string},
+ *   address {string},
+ * };
+ */
+function validateVAT(vatID, timeout) {
+  var countryCode = vatID.substr(0, 2);
+  var vatNumber = vatID.substr(2);
+  if (EU_COUNTRIES_CODES.indexOf(countryCode) < 0) {
+    //console.error("Country code " + countryCode + " is invalid");
+    throw new Error(ERROR_MSG['INVALID_INPUT_COUNTRY']);
   }
-  if (indexOf.call(EU_COUNTRIES_CODES, countryCode) < 0 || !(vatNumber != null ? vatNumber.length : void 0)) {
-    return process.nextTick(function() {
-      return callback(new Error(ERROR_MSG['INVALID_INPUT']));
-    });
+  if (!vatNumber) {
+    throw new Error(ERROR_MSG['INVALID_INPUT_NUMBER']);
   }
-  xml = soapBodyTemplate.replace('_country_code_placeholder_', countryCode).replace('_vat_number_placeholder_', vatNumber).replace('\n', '').trim();
+  var xml = soapBodyTemplate
+      .replace('%COUNTRY_CODE%', countryCode)
+      .replace('%VAT_NUMBER%', vatNumber)
+      .replace('\n', '').trim();
   headers['Content-Length'] = Buffer.byteLength(xml, 'utf8');
-  options = {
+  var options = {
     host: parsedUrl.host,
     method: 'POST',
     path: parsedUrl.path,
     headers: headers,
-    family: 4
+    family: 4,
   };
-  req = http.request(options, function(res) {
-    var str;
-    res.setEncoding('utf8');
-    str = '';
-    res.on('data', function(chunk) {
-      return str += chunk;
+  return new Promise((successCallback, errorCallback) => {
+    // TODO use r2
+    var req = http.request(options, res => {
+      var str = "";
+      res.setEncoding('utf8');
+      res.on('data', function(chunk) {
+        return str += chunk;
+      });
+      return res.on('end', () => {
+        try {
+          successCallback(parseSoapResponse(str));
+        } catch (error) {
+          errorCallback(error);
+          return;
+        }
+      });
     });
-    return res.on('end', function() {
-      var data, err, ref;
-      try {
-        data = parseSoapResponse(str);
-      } catch (error) {
-        err = error;
-        return callback(err);
-      }
-      if ((ref = data.faultString) != null ? ref.length : void 0) {
-        err = new Error(getReadableErrorMsg(data.faultString));
-        err.code = data.faultCode;
-        return callback(err);
-      }
-      return callback(null, data);
-    });
+    if (timeout) {
+      req.setTimeout(timeout, () => {
+        return req.abort();
+      });
+    }
+    req.on('error', errorCallback);
+    req.write(xml);
+    req.end();
   });
-  if (timeout) {
-    req.setTimeout(timeout, function() {
-      return req.abort();
-    });
-  }
-  req.on('error', callback);
-  req.write(xml);
-  return req.end();
 };
+
+var exports;
+module.exports = exports = validateVAT;
