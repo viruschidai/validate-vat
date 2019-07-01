@@ -48,7 +48,7 @@ function parseSoapResponse(soapMessage) {
       ex.soapMessage = soapMessage;
       throw ex;
     }
-    return match[1];
+    return match[1].trim();
   };
 
   var hasFault = soapMessage.match(/<soap:Fault>\S+<\/soap:Fault>/g);
@@ -62,6 +62,7 @@ function parseSoapResponse(soapMessage) {
     countryCode: parseField('countryCode'),
     vatNumber: parseField('vatNumber'),
     valid: parseField('valid') === 'true',
+    serverValidated: true,
     name: parseField('name'),
     address: parseField('address').replace(/\n/g, ', '),
   };
@@ -75,7 +76,8 @@ var vatIDRegexp = /^[A-Z]{2,2}[0-9A-Z]{2,13}$/;
  * @returns {Promise}
  * async function (you can `await` it)
  * @returns {
-*   valid {boolean}   this is what you're most likely interested in
+ *   valid {boolean}   the VAT ID is OK
+ *   serverValidated {boolean}   the ID was checked against the state server
  *   name {string},
  *   address {string},
  * };
@@ -121,7 +123,7 @@ function validateVAT(vatID, timeout) {
               countryCode,
               vatNumber,
               valid: true,
-              validated: false,
+              serverValidated: false,
               name: '',
               address: '',
             });

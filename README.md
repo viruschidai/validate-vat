@@ -10,11 +10,14 @@ A value added tax identification number or VAT identification number (VATIN) is 
 
 ## Get started
 ```bash
-npm install validate-vat
+npm install --save https://github.com/benbucksch/validate-vat
+# or
+yarn add https://github.com/benbucksch/validate-vat
 ```
+
 In your code
 ```javascript
-var validateVAT = require('validate-vat');
+const validateVAT = require('validate-vat');
 var vatID = 'DE1234567890';
 var vatResult = await validate(vatID);
 console.log(vatResult.valid ? "valid" : "not valid");
@@ -25,8 +28,9 @@ if valid:
 ```javascript
 {
   valid: true,
-  name: 'company name',
-  address: 'company address'
+  serverValidated: true,
+  name: 'Eulen GmbH',
+  address: 'Waldstr. 8, 10000 Woods'
 }
 ```
 (name and address are optional, depending on country)
@@ -35,6 +39,7 @@ if invalid:
 ```javascript
 {
   valid: false,
+  serverValidated: true,
   name: '---',
   address: '---'
 }
@@ -44,7 +49,7 @@ if state server down:
 ```javascript
 {
   valid: true,
-  validated: false,
+  serverValidated: false,
   name: '',
   address: ''
 }
