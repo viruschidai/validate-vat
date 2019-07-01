@@ -37,8 +37,8 @@ if invalid:
 {
   valid: false,
   serverValidated: true,
-  name: '---',
-  address: '---'
+  name: '',
+  address: ''
 }
 ```
 

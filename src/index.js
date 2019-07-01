@@ -48,7 +48,11 @@ function parseSoapResponse(soapMessage) {
       ex.soapMessage = soapMessage;
       throw ex;
     }
-    return match[1].trim();
+    var value = match[1].trim();
+    if (value == '---') {
+      value = '';
+    }
+    return value;
   };
 
   var hasFault = soapMessage.match(/<soap:Fault>\S+<\/soap:Fault>/g);
