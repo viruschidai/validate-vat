@@ -1,9 +1,6 @@
 # Validate European VAT number
 
-[![Build Status](https://travis-ci.org/viruschidai/validate-vat.svg?branch=master)](https://travis-ci.org/viruschidai/validate-vat)
-[![Downloads](https://img.shields.io/npm/dm/validate-vat.svg)](https://www.npmjs.com/package/validate-vat)
-
-A very lightweight, tiny lib (no external dependencies) allows you to verify the validity of a VAT number issued by any European Union Member State. This lib is basically calling web service provided by VIES (at http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl) for VAT number validation. 
+A very lightweight, tiny lib (no external dependencies) which allows you to verify the validity of a VAT ID number issued by any European Union Member State. This lib is basically calling web service provided by VIES at https://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl for VAT number validation.
 
 ## What is a VAT number?
 A value added tax identification number or VAT identification number (VATIN) is an identifier used in many countries, including the countries of the European Union, for value added tax purposes.
@@ -68,15 +65,16 @@ For more details usage, please check test.
 
 ## Change Log
 ### 0.6.0
-- Reformat as ES6 JS instead of Coffee script
+- Reformat as ES6 JS instead of Coffee script, removing further dependencies
 - Do simple syntax check first, before asking server
 - If state server is down, return valid, if syntax check passes
+- Use HTTPS
 
 ### 0.5.0
-- Use IPv4 explicitly https://github.com/viruschidai/validate-vat/pull/13
+- Use IPv4 explicitly
 
 ### 0.4.0
-- Added a timeout option in https://github.com/viruschidai/validate-vat/pull/9
+- Added a timeout option
 - Upgraded versions of dev dependencies to latest versions
 
 ### 0.3.1

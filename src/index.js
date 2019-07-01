@@ -2,7 +2,7 @@ const url = require('url');
 const http = require('http');
 //var indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-const serviceUrl = 'http://ec.europa.eu/taxation_customs/vies/services/checkVatService';
+const serviceUrl = 'https://ec.europa.eu/taxation_customs/vies/services/checkVatService';
 const parsedUrl = url.parse(serviceUrl);
 
 const soapBodyTemplate = '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"\n  xmlns:tns1="urn:ec.europa.eu:taxud:vies:services:checkVat:types"\n  xmlns:impl="urn:ec.europa.eu:taxud:vies:services:checkVat">\n  <soap:Header>\n  </soap:Header>\n  <soap:Body>\n    <tns1:checkVat xmlns:tns1="urn:ec.europa.eu:taxud:vies:services:checkVat:types"\n     xmlns="urn:ec.europa.eu:taxud:vies:services:checkVat:types">\n     <tns1:countryCode>%COUNTRY_CODE%</tns1:countryCode>\n     <tns1:vatNumber>%VAT_NUMBER%</tns1:vatNumber>\n    </tns1:checkVat>\n  </soap:Body>\n</soap:Envelope>';
