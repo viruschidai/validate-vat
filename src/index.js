@@ -11,7 +11,7 @@ const EU_COUNTRIES_CODES = ['AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI'
 
 const ERROR_MSG = {
   'INVALID_INPUT_COUNTRY': 'The country code in the VAT ID is invalid',
-  'INVALID_INPUT_NUMBER': 'The VAT number part is empty',
+  'INVALID_INPUT_NUMBER': 'The VAT number part is empty or invalid',
   'SERVICE_UNAVAILABLE': 'The VIES VAT service is unavailable, please try again later',
   'MS_UNAVAILABLE': 'The VAT database of the requested member country is unavailable, please try again later',
   'MS_MAX_CONCURRENT_REQ': 'The VAT database of the requested member country has had too many requests, please try again later',
@@ -67,6 +67,8 @@ function parseSoapResponse(soapMessage) {
   };
 };
 
+var vatIDRegexp = /^[A-Z]{2,2}[0-9A-Z]{2,13}$/;
+
 /**
  * @param vatID {string} VAT ID, starting with 2-letter country code, then the number,
  *     e.g. "DE1234567890"
@@ -85,7 +87,7 @@ function validateVAT(vatID, timeout) {
     //console.error("Country code " + countryCode + " is invalid");
     throw new Error(ERROR_MSG['INVALID_INPUT_COUNTRY']);
   }
-  if (!vatNumber) {
+  if (!vatIDRegexp.test(vatID)) {
     throw new Error(ERROR_MSG['INVALID_INPUT_NUMBER']);
   }
   var xml = soapBodyTemplate
@@ -111,8 +113,20 @@ function validateVAT(vatID, timeout) {
       return res.on('end', () => {
         try {
           successCallback(parseSoapResponse(str));
-        } catch (error) {
-          errorCallback(error);
+        } catch (ex) {
+          if (ex.code == "soap:Server") { // Source data server is down
+            // Avoid to block our customers just because the state can't keep its servers up
+            // Presume valid
+            successCallback({
+              countryCode,
+              vatNumber,
+              valid: true,
+              validated: false,
+              name: '',
+              address: '',
+            });
+          }
+          errorCallback(ex);
           return;
         }
       });
