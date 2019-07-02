@@ -1,34 +1,30 @@
 {
   "name": "validate-vat",
-  "version": "0.5.1",
-  "description": "A Europe VAT number validation lib",
-  "main": "lib/index.js",
+  "version": "0.6.0",
+  "description": "EU VAT number validation",
+  "main": "src/index.js",
   "dependencies": {},
-  "devDependencies": {
-    "coffee-script": "1.12.7",
-    "expect.js": "0.3.1",
-    "mocha": "6.1.4"
-  },
-  "scripts": {
-    "test": "mocha --require coffee-script/register -R spec -t 10000 --recursive test/**/*.coffee",
-    "prepublish": "coffee --output lib --compile src"
-  },
+  "devDependencies": {},
   "repository": {
     "type": "git",
-    "url": "https://github.com/viruschidai/validate-vat"
+    "url": "https://github.com/benbucksch/validate-vat"
   },
   "keywords": [
     "VAT",
+    "VAT ID",
     "VIES",
     "Tax",
+    "EU",
     "Number",
-    "Validation",
-    "node.js"
+    "Validation"
   ],
   "author": "Bill Gao",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/viruschidai/validate-vat/issues"
+    "url": "https://github.com/benbucksch/validate-vat/issues"
+  },
+  "scripts": {
+    "test": "node test/test.js"
   },
   "directories": {
     "test": "test"
