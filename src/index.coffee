@@ -1,7 +1,7 @@
 url = require 'url'
-http = require 'http'
+https = require 'https'
 
-serviceUrl = 'http://ec.europa.eu/taxation_customs/vies/services/checkVatService'
+serviceUrl = 'https://ec.europa.eu/taxation_customs/vies/services/checkVatService'
 
 parsedUrl = url.parse serviceUrl
 
@@ -97,7 +97,7 @@ module.exports = exports = (countryCode, vatNumber, timeout, callback) ->
     headers: headers
     family: 4
 
-  req = http.request options, (res) ->
+  req = https.request options, (res) ->
     res.setEncoding 'utf8'
     str = ''
     res.on 'data', (chunk) ->
