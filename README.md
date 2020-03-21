@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/viruschidai/validate-vat.svg?branch=master)](https://travis-ci.org/viruschidai/validate-vat)
 [![Downloads](https://img.shields.io/npm/dm/validate-vat.svg)](https://www.npmjs.com/package/validate-vat)
 
-**Note: if you are write in typescript, please try out https://github.com/viruschidai/validate-vat-ts**
+**Note: if you are using typescript, please try out https://github.com/viruschidai/validate-vat-ts**
 
 A very lightweight, tiny lib (no external dependencies) allows you to verify the validity of a VAT number issued by any European Union Member State. This lib is basically calling web service provided by VIES (at http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl) for VAT number validation. 
 
