@@ -1,6 +1,6 @@
 {
   "name": "validate-vat",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "A Europe VAT number validation lib",
   "main": "lib/index.js",
   "dependencies": {},
