@@ -62,6 +62,10 @@ possible error messages
 For more details usage, please check test
 
 ## Change Log
+
+### 0.6.0 
+- Use https VIEW endpoint
+
 ### 0.5.0 
 - Use IPv4 explicitly https://github.com/viruschidai/validate-vat/pull/13
 
