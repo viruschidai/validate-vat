@@ -1,6 +1,5 @@
 const url = require('url');
 const http = require('http');
-//var indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 const serviceUrl = 'https://ec.europa.eu/taxation_customs/vies/services/checkVatService';
 const parsedUrl = url.parse(serviceUrl);
@@ -41,7 +40,7 @@ function getReadableErrorMsg(faultstring) {
 
 function parseSoapResponse(soapMessage) {
   function parseField(field) {
-    var regex = new RegExp("<" + field + ">\((\.|\\s)\*?\)</" + field + ">", 'gm');
+    const regex = new RegExp("<" + field + ">\((\.|\\s)\*?\)</" + field + ">", 'gm');
     var match = regex.exec(soapMessage);
     if (!match) {
       let ex = new Error("Failed to parse field " + field);
@@ -90,7 +89,6 @@ function validateVAT(vatID, timeout) {
   var countryCode = vatID.substr(0, 2);
   var vatNumber = vatID.substr(2);
   if (EU_COUNTRIES_CODES.indexOf(countryCode) < 0) {
-    //console.error("Country code " + countryCode + " is invalid");
     throw new Error(ERROR_MSG['INVALID_INPUT_COUNTRY']);
   }
   if (!vatIDRegexp.test(vatID)) {
