@@ -7,9 +7,9 @@ A value added tax identification number or VAT identification number (VATIN) is 
 
 ## Get started
 ```bash
-npm install --save https://github.com/benbucksch/validate-vat
+npm install --save validate-vat
 # or
-yarn add https://github.com/benbucksch/validate-vat
+yarn add validate-vat
 ```
 
 In your code
