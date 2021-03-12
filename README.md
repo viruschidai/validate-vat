@@ -63,6 +63,8 @@ For more details usage, please check test
 
 ## Change Log
 
+### 0.7.0 
+- Remove UK & Add Northern Ireland
 ### 0.6.0 
 - Use https VIEW endpoint
 
