@@ -16,7 +16,7 @@ describe 'validate()', ->
       done()
 
   it 'should return false if it is an invalid VAT number', (done) ->
-    validate 'GB', '802311783', (err, validationInfo) ->
+    validate 'NL', '802311783', (err, validationInfo) ->
       if err then return done err
       expect(validationInfo.valid).to.be false
       done()
