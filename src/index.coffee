@@ -77,6 +77,9 @@ parseSoapResponse = (soapMessage) ->
   return ret
 
 module.exports = exports = (countryCode, vatNumber, timeout, callback) ->
+  if typeof countryCode is 'string'
+    countryCode = countryCode.toUpperCase()
+
   if typeof timeout is 'function'
     callback = timeout
     timeout = null
