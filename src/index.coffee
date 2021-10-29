@@ -41,7 +41,6 @@ headers =
   'Accept-Charset': 'utf-8'
   'Connection': 'close'
   'Host' : parsedUrl.hostname
-  'SOAPAction': 'urn:ec.europa.eu:taxud:vies:services:checkVat/checkVat'
 
 getReadableErrorMsg = (faultstring) ->
   if ERROR_MSG[faultstring]?
