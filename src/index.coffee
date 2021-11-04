@@ -69,6 +69,7 @@ parseSoapResponse = (soapMessage) ->
       countryCode: parseField 'countryCode'
       vatNumber: parseField 'vatNumber'
       requestDate: parseField 'requestDate'
+      requestIdentifier: parseField 'requestIdentifier'
       valid: parseField('valid') is 'true'
       name: parseField 'name'
       address: parseField('address').replace /\n/g, ', '
