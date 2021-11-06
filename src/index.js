@@ -1,5 +1,5 @@
 const url = require('url');
-const http = require('http');
+const https = require('https');
 
 const serviceUrl = 'https://ec.europa.eu/taxation_customs/vies/services/checkVatService';
 const parsedUrl = url.parse(serviceUrl);
@@ -124,7 +124,7 @@ function validateVAT(vatID, timeout) {
   };
   return new Promise((successCallback, errorCallback) => {
     // TODO use r2
-    var req = http.request(options, res => {
+    var req = https.request(options, res => {
       var str = "";
       res.setEncoding('utf8');
       res.on('data', function(chunk) {
