@@ -31,10 +31,12 @@ var headers = {
 };
 
 function getReadableErrorMsg(faultstring) {
-  if (ERROR_MSG[faultstring]) {
+  if (!faultstring) {
+    return ERROR_MSG['UNKNOWN'];
+  } else if (ERROR_MSG[faultstring]) {
     return ERROR_MSG[faultstring];
   } else {
-    return ERROR_MSG['UNKNOWN'];
+    return faultstring;
   }
 };
 
@@ -54,7 +56,10 @@ function parseSoapResponse(soapMessage) {
     return value;
   };
 
-  var hasFault = soapMessage.match(/<soap:Fault>\S+<\/soap:Fault>/g);
+  var hasFault =
+    /<soap:Fault>/.test(soapMessage) &&
+    /<\/soap:Fault>/.test(soapMessage) &&
+    /<faultstring>/.test(soapMessage);
   if (hasFault) {
     let msg = getReadableErrorMsg(parseField('faultstring'));
     let ex = new Error(msg);
