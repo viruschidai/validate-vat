@@ -1,5 +1,5 @@
 {
-  "name": "validate-vat",
+  "name": "check-vat-id",
   "version": "1.1.0",
   "description": "EU VAT number validation",
   "main": "src/index.js",
@@ -7,7 +7,7 @@
   "devDependencies": {},
   "repository": {
     "type": "git",
-    "url": "https://github.com/viruschidai/validate-vat"
+    "url": "https://github.com/benbucksch/validate-vat"
   },
   "keywords": [
     "VAT",
@@ -21,7 +21,7 @@
   "author": "Bill Gao",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/viruschidai/validate-vat/issues"
+    "url": "https://github.com/benbucksch/validate-vat/issues"
   },
   "scripts": {
     "test": "node test/test.js"
