@@ -39,7 +39,6 @@ var headers = {
   'Accept-Charset': 'utf-8',
   'Connection': 'close',
   'Host': parsedUrl.hostname,
-  'SOAPAction': 'urn:ec.europa.eu:taxud:vies:services:checkVat/checkVat',
 };
 
 function getReadableErrorMsg(faultstring) {
