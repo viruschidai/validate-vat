@@ -4,7 +4,19 @@ const http = require('http');
 const serviceUrl = 'https://ec.europa.eu/taxation_customs/vies/services/checkVatService';
 const parsedUrl = url.parse(serviceUrl);
 
-const soapBodyTemplate = '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"\n  xmlns:tns1="urn:ec.europa.eu:taxud:vies:services:checkVat:types"\n  xmlns:impl="urn:ec.europa.eu:taxud:vies:services:checkVat">\n  <soap:Header>\n  </soap:Header>\n  <soap:Body>\n    <tns1:checkVat xmlns:tns1="urn:ec.europa.eu:taxud:vies:services:checkVat:types"\n     xmlns="urn:ec.europa.eu:taxud:vies:services:checkVat:types">\n     <tns1:countryCode>%COUNTRY_CODE%</tns1:countryCode>\n     <tns1:vatNumber>%VAT_NUMBER%</tns1:vatNumber>\n    </tns1:checkVat>\n  </soap:Body>\n</soap:Envelope>';
+const soapBodyTemplate = `
+<soap:Envelope
+    xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+    xmlns:vat="urn:ec.europa.eu:taxud:vies:services:checkVat:types">
+  <soap:Header/>
+  <soap:Body>
+    <vat:checkVat>
+      <vat:countryCode>%COUNTRY_CODE%</vat:countryCode>
+      <vat:vatNumber>%VAT_NUMBER%</vat:vatNumber>
+    </vat:checkVat>
+  </soap:Body>
+</soap:Envelope>
+`;
 
 const EU_COUNTRIES_CODES = ['AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'EL', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'GB'];
 
@@ -102,7 +114,7 @@ function validateVAT(vatID, timeout) {
   var xml = soapBodyTemplate
       .replace('%COUNTRY_CODE%', countryCode)
       .replace('%VAT_NUMBER%', vatNumber)
-      .replace('\n', '').trim();
+      .trim();
   headers['Content-Length'] = Buffer.byteLength(xml, 'utf8');
   var options = {
     host: parsedUrl.host,
