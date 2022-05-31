@@ -10,6 +10,7 @@ A very lightweight, tiny lib (no external dependencies) allows you to verify the
 ## What is a VAT number?
 A value added tax identification number or VAT identification number (VATIN) is an identifier used in many countries, including the countries of the European Union, for value added tax purposes.
 
+
 ## Get started
 ```bash
 npm install validate-vat
