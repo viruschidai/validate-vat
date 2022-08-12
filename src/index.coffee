@@ -49,7 +49,7 @@ getReadableErrorMsg = (faultstring) ->
     return ERROR_MSG['UNKNOWN']
 
 # I don't really want to install any xml parser which may require multpiple packages
-parseSoapResponse = (soapMessage) ->
+parseSoapResponse = (soapMessage, countryCode) ->
   parseField = (field) ->
     regex = new RegExp "<#{field}>\((\.|\\s)\*?\)</#{field}>", 'gm'
     match = regex.exec(soapMessage)
@@ -66,7 +66,7 @@ parseSoapResponse = (soapMessage) ->
       faultString: parseField 'faultstring'
   else
     ret =
-      countryCode: parseField 'countryCode'
+      countryCode: countryCode
       vatNumber: parseField 'vatNumber'
       requestDate: parseField 'requestDate'
       valid: parseField('valid') is 'true'
@@ -107,7 +107,7 @@ module.exports = exports = (countryCode, vatNumber, timeout, callback) ->
 
     res.on 'end', ->
       try
-        data = parseSoapResponse str
+        data = parseSoapResponse str,countryCode
       catch err
         return callback err
 
