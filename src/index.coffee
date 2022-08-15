@@ -34,7 +34,7 @@ ERROR_MSG =
   'UNKNOWN': 'Unknown error'
 
 headers =
-  'Content-Type': 'application/x-www-form-urlencoded'
+  'Content-Type': 'text/xml; charset=utf-8'
   'User-Agent': 'node-soap'
   'Accept' : 'text/html,application/xhtml+xml,application/xml,text/xml;q=0.9,*/*;q=0.8'
   'Accept-Encoding': 'none'
@@ -59,19 +59,19 @@ parseSoapResponse = (soapMessage) ->
       throw err
     return match[1]
 
-  hasFault = soapMessage.match /<soap:Fault>\S+<\/soap:Fault>/g
+  hasFault = soapMessage.match /<env:Fault>\S+<\/env:Fault>/g
   if hasFault
     ret =
       faultCode: parseField 'faultcode'
       faultString: parseField 'faultstring'
   else
     ret =
-      countryCode: parseField 'countryCode'
-      vatNumber: parseField 'vatNumber'
-      requestDate: parseField 'requestDate'
-      valid: parseField('valid') is 'true'
-      name: parseField 'name'
-      address: parseField('address').replace /\n/g, ', '
+      countryCode: parseField 'ns2:countryCode'
+      vatNumber: parseField 'ns2:vatNumber'
+      requestDate: parseField 'ns2:requestDate'
+      valid: parseField('ns2:valid') is 'true'
+      name: parseField 'ns2:name'
+      address: parseField('ns2:address').replace /\n/g, ', '
 
   return ret
 
