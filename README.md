@@ -63,6 +63,9 @@ For more details usage, please check test
 
 ## Change Log
 
+### 0.9.0
+- Contains change related to the latest change in VIES service, see [PR](https://github.com/viruschidai/validate-vat/pull/52/files)
+
 ### 0.7.0 
 - Remove UK & Add Northern Ireland
 ### 0.6.0 
