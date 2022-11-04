@@ -134,7 +134,7 @@ function validateVAT(vatID, timeout) {
         try {
           successCallback(parseSoapResponse(str));
         } catch (ex) {
-          if (ex.code == "soap:Server") { // Source data server is down
+          if (true || ex.code == "soap:Server") { // Source data server is down
             // Avoid to block our customers just because the state can't keep its servers up
             // Presume valid
             successCallback({
