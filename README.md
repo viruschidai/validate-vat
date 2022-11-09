@@ -64,6 +64,15 @@ in case of other errors: throws an exception. Possible error messages:
 For more details usage, please check test.
 
 ## Change Log
+
+### 1.1.1
+- Adapt to new server response
+- Update README
+
+### 1.0.0
+- Fix server fail
+- Remove GB and add XI for Northern Ireland
+
 ### 0.6.0
 - Reformat as ES6 JS instead of Coffee script, removing further dependencies
 - Do simple syntax check first, before asking server

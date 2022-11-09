@@ -7,7 +7,7 @@
   "devDependencies": {},
   "repository": {
     "type": "git",
-    "url": "https://github.com/benbucksch/validate-vat"
+    "url": "https://github.com/benbucksch/check-vat-id"
   },
   "keywords": [
     "VAT",
@@ -21,7 +21,7 @@
   "author": "Bill Gao",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/benbucksch/validate-vat/issues"
+    "url": "https://github.com/benbucksch/check-vat-id/issues"
   },
   "scripts": {
     "test": "node test/test.js"
