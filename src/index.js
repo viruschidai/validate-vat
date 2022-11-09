@@ -32,7 +32,7 @@ const ERROR_MSG = {
 };
 
 var headers = {
-  'Content-Type': 'application/x-www-form-urlencoded',
+  'Content-Type': 'text/xml; charset=utf-8',
   'User-Agent': 'soap node',
   'Accept': 'text/html,application/xhtml+xml,application/xml,text/xml;q=0.9,*/*;q=0.8',
   'Accept-Encoding': 'none',
@@ -68,8 +68,7 @@ function parseSoapResponse(soapMessage) {
   };
 
   var hasFault =
-    /<soap:Fault>/.test(soapMessage) &&
-    /<\/soap:Fault>/.test(soapMessage) &&
+    /<env:Fault>/.test(soapMessage) && /<\/env:Fault>/.test(soapMessage) &&
     /<faultstring>/.test(soapMessage);
   if (hasFault) {
     let msg = getReadableErrorMsg(parseField('faultstring'));
@@ -78,12 +77,12 @@ function parseSoapResponse(soapMessage) {
     throw ex;
   }
   return {
-    countryCode: parseField('countryCode'),
-    vatNumber: parseField('vatNumber'),
-    valid: parseField('valid') === 'true',
+    countryCode: parseField('ns2:countryCode'),
+    vatNumber: parseField('ns2:vatNumber'),
+    valid: parseField('ns2:valid') === 'true',
     serverValidated: true,
-    name: parseField('name'),
-    address: parseField('address').replace(/\n/g, ', '),
+    name: parseField('ns2:name'),
+    address: parseField('ns2:address').replace(/\n/g, ', '),
   };
 };
 
