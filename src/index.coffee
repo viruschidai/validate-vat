@@ -1,9 +1,8 @@
-url = require 'url'
 https = require 'https'
 
 serviceUrl = 'https://ec.europa.eu/taxation_customs/vies/services/checkVatService'
 
-parsedUrl = url.parse serviceUrl
+parsedUrl = new URL serviceUrl
 
 soapBodyTemplate = '''
 <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
@@ -95,7 +94,7 @@ module.exports = exports = (countryCode, vatNumber, timeout, callback) ->
   options =
     host: parsedUrl.host
     method: 'POST',
-    path: parsedUrl.path
+    path: parsedUrl.pathname
     headers: headers
     family: 4
 
